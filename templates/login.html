@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | BrightNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #EB703B;
+            --bg-gray: #F0F0F0;
+            --text-dark: #080B15;
+            --text-muted: #888;
+            --input-border: #EEEEEE;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-gray);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: var(--white);
+            width: 960px;
+            max-width: 95vw;
+            height: 680px;
+            border-radius: 20px;
+            display: flex;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            padding: 12px;
+        }
+
+        /* Left Side */
+        .left-panel {
+            flex: 1;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FDE6D7 0%, #F5A67F 45%, #E8713C 100%);
+            position: relative;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: var(--text-dark);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            z-index: 10;
+            letter-spacing: -0.02em;
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .hero-text {
+            z-index: 10;
+        }
+
+        .hero-text p {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        .hero-text h1 {
+            font-size: 2.15rem;
+            line-height: 1.2;
+            font-weight: 700;
+            max-width: 380px;
+            color: #111;
+        }
+
+        /* Right Side */
+        .right-panel {
+            flex: 1.1;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--white);
+        }
+
+        .asterisk {
+            color: var(--primary-orange);
+            font-size: 3rem;
+            line-height: 0.8;
+            margin-bottom: 12px;
+            font-family: serif;
+        }
+
+        .right-panel h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 320px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s;
+            color: #333;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #CDCDCD;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #BBB;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            margin: 28px 0;
+            display: flex;
+            align-items: center;
+            color: #EEE;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .divider span {
+            padding: 0 12px;
+            color: #AAA;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            flex: 1;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #F0F0F0;
+            border-radius: 6px;
+            background: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: #FAFAFA;
+        }
+
+        .social-btn svg {
+            width: 16px;
+            height: 16px;
+            color: #333;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .footer-text a {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                width: 450px;
+                padding: 10px;
+            }
+
+            .left-panel {
+                height: 180px;
+                flex: none;
+            }
+
+            .hero-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .right-panel {
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10C7 10 7 5 12 5C17 5 17 10 17 10L17 14C17 14 17 19 12 19C7 19 7 14 7 14L7 10Z"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M8 11C8 11 10 9 12 9C14 9 16 11 16 11" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <path d="M8 15C8 15 10 13 12 13C14 13 16 15 16 15" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
+                <span>BrightNest</span>
+            </div>
+
+            <div class="hero-text">
+                <p>Welcome back</p>
+                <h1>Sign in to continue your journey with peak productivity.</h1>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="asterisk">*</div>
+            <h2>Sign in</h2>
+            <p class="subtitle">Enter your credentials to access your personal hub and manage your projects.</p>
+
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="email">Your email</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="natalia.brak@knmstudio.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
+                        <span class="toggle-password">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign in</button>
+            </form>
+
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" title="Google">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C9.03,19.27 6.59,17.38 6.59,13.21C6.59,9.03 9.07,7.15 12.19,7.15C14.06,7.15 15.1,7.9 15.8,8.53L17.7,6.63C16.4,5.43 14.65,4.42 12.18,4.42C7.14,4.42 3.82,8.06 3.82,13.22C3.82,18.38 7.14,22.02 12.18,22.02C17.22,22.02 21.6,18.38 21.6,13.22C21.6,12.28 21.5,11.63 21.35,11.1Z" />
+                    </svg>
+                </button>
+                <button class="social-btn" title="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                    </svg>
+                </button>
+                <button class="social-btn" title="Apple">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.06,12.83C17.06,15.11 19.06,15.88 19.11,15.9C19.09,15.94 18.79,16.99 18.06,18.07C17.42,19 16.76,19.92 15.76,19.94C14.78,19.96 14.47,19.36 13.34,19.36C12.21,19.36 11.85,19.94 10.93,19.98C9.97,20.02 9.21,19.03 8.57,18.11C7.26,16.21 6.26,13.34 6.26,11.08C6.26,7.54 8.53,5.69 10.74,5.65C11.9,5.63 12.98,6.43 13.69,6.43C14.4,6.43 15.71,5.47 17.1,5.61C17.68,5.63 19.31,5.84 20.35,7.37C20.27,7.42 18.28,8.57 18.3,10.89C18.3,13.67 20.81,14.6 20.86,14.62C20.84,14.67 20.45,16.02 19.51,17.4C18.69,18.59 17.86,19.78 16.54,19.78C15.22,19.78 14.8,18.98 13.27,18.98C11.75,18.98 11.28,19.78 10.04,19.78C8.81,19.78 7.82,18.51 7,17.33C5.22,14.76 3.88,10.45 5.76,7.18C6.69,5.56 8.36,4.54 10.18,4.52C11.57,4.5 12.88,5.47 13.73,5.47C14.59,5.47 16.14,4.32 17.78,4.48C18.47,4.51 20.4,4.76 21.65,6.59C21.55,6.65 19.5,7.85 19.52,10.27C19.52,12.7 21.57,13.74 21.65,13.79C21.63,13.84 21.2,15.26 20.22,16.7C19.36,17.96 18.48,19.21 17.1,19.21C15.72,19.21 15.28,18.37 13.7,18.37C12.11,18.37 11.62,19.21 10.32,19.21C9.03,19.21 8,17.88 7.14,16.64C5.47,14.25 4.21,9.85 5.98,6.81C6.85,5.32 8.41,4.36 10.12,4.34C11.42,4.32 12.65,5.22 13.45,5.22C14.24,5.22 15.69,4.16 17.22,4.31C17.86,4.34 19.66,4.57 20.83,6.28L17.06,12.83Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="footer-text">
+                Don't have an account? <a href="signup.html">Create one</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
