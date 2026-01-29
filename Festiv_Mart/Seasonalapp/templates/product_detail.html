@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} — Festiv Mart</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;padding:40px;background:#f8fafc}
+        .container{max-width:900px;margin:0 auto;background:#fff;padding:24px;border-radius:12px}
+        .product-image{height:360px;background-size:cover;background-position:center;border-radius:8px}
+        .price{color:#EB703B;font-weight:800;font-size:1.4rem}
+        .meta{color:#666;margin-bottom:12px}
+    </style>
+    </head>
+<body>
+    <div class="container">
+        <a href="{% url 'index' %}">&larr; Back</a>
+        <h1>{{ product.name }}</h1>
+        <div class="meta">Category: {% if product.category %}{{ product.category.name }}{% else %}Uncategorized{% endif %}</div>
+        <div class="product-image" style="background-image:url('{{ product.image_url|default:"https://via.placeholder.com/900x360" }}')"></div>
+        <p class="price">${{ product.price }}</p>
+        <div>{{ product.description|linebreaks }}</div>
+        <form method="post" action="#">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}" />
+            <button type="submit" style="margin-top:16px;padding:12px 18px;background:#080B15;color:#fff;border:none;border-radius:8px;">Add to cart</button>
+        </form>
+    </div>
+</body>
+</html>

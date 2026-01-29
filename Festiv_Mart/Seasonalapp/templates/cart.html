@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Festiv Mart</title>
+    <meta name="description"
+        content="Review your shopping cart and proceed to checkout. Secure payment and fast delivery guaranteed.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #EB703B;
+            --dark-text: #080B15;
+            --text-muted: #888;
+            --bg-light: #F8FAFF;
+            --white: #FFFFFF;
+            --card-bg: #F6F7FB;
+            --gradient-start: #FDE6D7;
+            --gradient-mid: #F5A67F;
+            --gradient-end: #E8713C;
+            --border-color: #E8E8E8;
+            --success-green: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--dark-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-orange);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            position: relative;
+            padding: 8px;
+            transition: transform 0.2s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-orange);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .btn-auth {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-auth:hover {
+            background-color: #d66332;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid) 45%, var(--gradient-end) 100%);
+            padding: 60px 8%;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .breadcrumb a {
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* Cart Container */
+        .cart-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 8%;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .cart-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .item-count {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 24px;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--bg-light);
+            align-items: center;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark-text);
+        }
+
+        .item-category {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .item-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--white);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .qty-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #EF4444;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .remove-btn:hover {
+            color: #DC2626;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .empty-cart svg {
+            width: 120px;
+            height: 120px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+
+        .empty-cart p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .btn-continue {
+            background: var(--primary-orange);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            background: #d66332;
+            transform: translateY(-2px);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-summary h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        .summary-row.total {
+            padding-top: 20px;
+            border-top: 2px solid var(--bg-light);
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .summary-row .label {
+            color: var(--text-muted);
+        }
+
+        .summary-row .value {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .summary-row.total .value {
+            color: var(--primary-orange);
+        }
+
+        .discount-badge {
+            background: var(--success-green);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .coupon-section {
+            margin: 24px 0;
+        }
+
+        .coupon-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .coupon-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .coupon-input input:focus {
+            border-color: var(--primary-orange);
+        }
+
+        .btn-apply {
+            padding: 12px 20px;
+            background: var(--dark-text);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-apply:hover {
+            background: var(--primary-orange);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: var(--primary-orange);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 24px;
+            box-shadow: 0 10px 30px rgba(235, 112, 59, 0.3);
+        }
+
+        .btn-checkout:hover {
+            background: #d66332;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(235, 112, 59, 0.4);
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .secure-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 60px 8% 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            color: var(--primary-orange);
+        }
+
+        .footer-brand p {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .footer-links h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links ul li a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links ul li a:hover {
+            opacity: 1;
+            color: var(--primary-orange);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 16px;
+            }
+
+            .item-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .item-actions {
+                grid-column: 2;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="landing.html" class="logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+            </svg>
+            FESTIV MART
+        </a>
+        <ul class="nav-links">
+            <li><a href="landing.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">Deals</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div class="cart-icon" onclick="window.location.href=\"{% url 'cart' %}\"">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+                </svg>
+                <span class="cart-badge" id="cart-count">0</span>
+            </div>
+            <a href="login.html" class="btn-auth">Sign In</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Shopping Cart</h1>
+        <div class="breadcrumb">
+            <a href="landing.html">Home</a>
+            <span>/</span>
+            <span>Cart</span>
+        </div>
+    </section>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <!-- Cart Items -->
+        <div class="cart-items">
+            <div class="cart-header">
+                <h2>Your Cart</h2>
+                <span class="item-count" id="item-count">0 items</span>
+            </div>
+            <div id="cart-items-container">
+                <!-- Cart items will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span class="value" id="subtotal">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Shipping</span>
+                <span class="value" id="shipping">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Tax (10%)</span>
+                <span class="value" id="tax">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Discount</span>
+                <span class="value discount-badge" id="discount" style="display: none;">-$0.00</span>
+            </div>
+
+            <div class="coupon-section">
+                <label style="font-size: 0.9rem; font-weight: 600; color: var(--dark-text);">Have a coupon?</label>
+                <div class="coupon-input">
+                    <input type="text" id="coupon-code" placeholder="Enter code">
+                    <button class="btn-apply" onclick="applyCoupon()">Apply</button>
+                </div>
+            </div>
+
+            <div class="summary-row total">
+                <span class="label">Total</span>
+                <span class="value" id="total">$0.00</span>
+            </div>
+
+            <button class="btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
+
+            <div class="secure-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Secure Checkout
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>FESTIV MART</h3>
+                <p>Your one-stop destination for festival shopping. Quality products, amazing deals, and exceptional
+                    service - all year round.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Festiv Mart. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('festivCart')) || [];
+        let discountAmount = 0;
+
+        // Initialize
+        function init() {
+            updateCartCount();
+            renderCart();
+            updateSummary();
+        }
+
+        // Render cart
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+                        </svg>
+                        <h3>Your cart is empty</h3>
+                        <p>Looks like you haven't added anything to your cart yet.</p>
+                        <a href="shop.html" class="btn-continue">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="item-image" style="background-image: url('${item.image}');"></div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-category">${item.category}</div>
+                        <div class="item-price">$${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeItem(${item.id})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                            </svg>
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('item-count').textContent = `${cart.length} item${cart.length !== 1 ? 's' : ''}`;
+        }
+
+        // Update quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeItem(productId);
+                } else {
+                    saveCart();
+                    renderCart();
+                    updateSummary();
+                }
+            }
+        }
+
+        // Remove item
+        function removeItem(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            renderCart();
+            updateSummary();
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        // Update summary
+        function updateSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? (subtotal >= 50 ? 0 : 10) : 0;
+            const tax = subtotal * 0.1;
+            const total = subtotal + shipping + tax - discountAmount;
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = shipping === 0 && subtotal > 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+
+            if (discountAmount > 0) {
+                document.getElementById('discount').style.display = 'inline-block';
+                document.getElementById('discount').textContent = `-$${discountAmount.toFixed(2)}`;
+            }
+        }
+
+        // Apply coupon
+        function applyCoupon() {
+            const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+            const validCoupons = {
+                'FESTIV10': 10,
+                'SAVE20': 20,
+                'WELCOME15': 15
+            };
+
+            if (validCoupons[code]) {
+                discountAmount = validCoupons[code];
+                updateSummary();
+                alert(`Coupon applied! You saved $${discountAmount}!`);
+                document.getElementById('coupon-code').value = '';
+            } else {
+                alert('Invalid coupon code');
+            }
+        }
+
+        // Save cart
+        function saveCart() {
+            localStorage.setItem('festivCart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        // Proceed to checkout
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+
+</html>
