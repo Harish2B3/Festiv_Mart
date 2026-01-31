@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festiv Mart | Your Festival Shopping Destination</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <!-- SVG Defs for Gradients -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="logoGradient" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FF6B35" />
+            <stop offset="100%" stop-color="#F97316" />
+        </linearGradient>
+    </svg>
+    <style>
+        /* Page-specific overrides if any */
+        .hero-banner {
+            background: linear-gradient(135deg, #FFE4D6 0%, #FFCCB0 100%);
+            border-radius: 30px;
+            padding: 80px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        
+        .hero-image {
+            width: 500px;
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop') center/cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" />
+            </svg>
+            FESTIV MART
+        </a>
+
+        <ul class="nav-menu">
+            <li><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+            <li><a href="{% url 'shop' %}" class="nav-link">Shop</a></li>
+            
+            <li class="mode-switch">
+                <a href="{% url 'home' %}" class="active">Regular</a>
+                <a href="{% url 'seasonal' %}">Seasonal</a>
+            </li>
+        </ul>
+
+        <div class="nav-actions" style="display: flex; align-items: center; gap: 15px;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" style="text-decoration: none; color: inherit; position: relative;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+                    </svg>
+                    <span id="cart-dot" style="position: absolute; top: -5px; right: -5px; width: 10px; height: 10px; background: var(--primary-orange); border-radius: 50%; display: none; border: 2px solid white;"></span>
+                </a>
+                <a href="{% url 'dashboard' %}" class="user-profile">
+                    <div class="avatar">{{ user.username|first|upper }}</div>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-outline" style="padding: 10px 20px; font-size: 0.9rem; border-color: var(--text-dark); color: var(--text-dark);">Sign In</a>
+                <a href="{% url 'signup' %}" class="btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">Join Free</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <section class="hero-banner">
+            <div class="hero-content">
+                <span class="badge badge-new">New Arrivals</span>
+                <h1 style="font-size: 3.5rem; margin: 1rem 0; line-height: 1.1;">Your Festival <br>Shopping Destination</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">
+                    Discover amazing deals on everything you need for the perfect celebration.
+                    From decorations to gifts - all in one place.
+                </p>
+                <div style="display: flex; gap: 15px;">
+                    <a href="{% url 'shop' %}" class="btn-primary">Shop Now</a>
+                    <a href="{% url 'seasonal' %}" class="btn-outline">Seasonal Deals</a>
+                </div>
+            </div>
+            <div class="hero-image"></div>
+        </section>
+
+        <!-- Dynamic Product Section -->
+        <h2 style="margin-top: 4rem; font-size: 2rem;">Featured Products</h2>
+        <div class="grid-products">
+            {% for product in products %}
+            <div class="card">
+                <div class="card-img" style="background-image: url('{{ product.get_image_url }}'); background-size: cover; background-position: center;">
+                    {% if product.is_seasonal %}
+                        <div style="padding: 10px;">
+                            <span class="badge badge-seasonal">SEASONAL</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">{{ product.category.name }}</span>
+                    <h3 style="margin: 5px 0 10px; font-size: 1.2rem;">{{ product.name }}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; font-size: 1.25rem; color: var(--primary-orange);">${{ product.price }}</span>
+                        <button style="border: none; background: #f1f5f9; padding: 8px; border-radius: 50%; cursor: pointer;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products featured yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <h3>FESTIV MART</h3>
+            <p>&copy; 2026 Festiv Mart. <br>Making every celebration special.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
